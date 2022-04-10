@@ -1,9 +1,13 @@
 @{
     ViewData["Title"] = "Login";
+    var returnUrl = ViewData["ReturnUrl"] as string;
 }
 
 <h1>Login</h1>
 
-<form method="">
-
+<form method="POST"
+      action="/login?ReturnUrl=@returnUrl">
+    <input type="text" name="username" placeholder="Username"/>
+    <input type="text" name="password" placeholder="Password"/>
+    <input type="submit" value="login"/>
 </form>
