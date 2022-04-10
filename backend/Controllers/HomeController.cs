@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using backend.Models;
 
 namespace backend.Controllers;
@@ -13,12 +14,24 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public IActionResult Login()
     {
         return View();
     }
 
-    public IActionResult Privacy()
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [Authorize]
+    public IActionResult OnlyLogged()
+    {
+        return View();
+    }
+
+    [Authorize]
+    public IActionResult Logout()
     {
         return View();
     }
