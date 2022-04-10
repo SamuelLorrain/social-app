@@ -1,8 +1,6 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-using backend.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -10,61 +8,43 @@ namespace backend.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    public HomeController() {}
 
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
-
-    public IActionResult Index()
+    [HttpGet("/login"), HttpGet("/")]
+    public IActionResult Login()
     {
         return View();
     }
 
-    [HttpGet("login")]
-    public IActionResult Login(string returnUrl)
+    [HttpPost("/login")]
+    public async Task<IActionResult> ValidateAsync(string username, string password)
     {
-        ViewData["ReturnUrl"] = System.Web.HttpUtility.UrlEncode(returnUrl);
-        return View();
-    }
-
-    [HttpPost("login")]
-    public async Task<IActionResult> ValidateAsync(string username, string password, string returnUrl)
-    {
-        if (username == "foo" && password == "bar") {
+        if (username == "foo" && password == "bar")
+        {
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim("username", username));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+            claims.Add(new Claim(ClaimTypes.Name, username));
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
             await HttpContext.SignInAsync(claimsPrincipal);
 
-            return Redirect(returnUrl);
+            return Redirect(Url.Action("Spa"));
         }
-        return BadRequest();
-    }
-
-    public IActionResult Register()
-    {
-        return View();
+        TempData["Error"] = "login incorrect";
+        return View("login");
     }
 
     [Authorize]
-    public IActionResult OnlyLogged()
+    public async Task<IActionResult> LogoutAsync()
     {
-        return View();
+        await HttpContext.SignOutAsync();
+        return Redirect("/");
     }
 
     [Authorize]
-    public IActionResult Logout()
+    public IActionResult Spa()
     {
         return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

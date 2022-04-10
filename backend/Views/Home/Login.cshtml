@@ -1,13 +1,26 @@
 @{
     ViewData["Title"] = "Login";
     var returnUrl = ViewData["ReturnUrl"] as string;
+    var error = TempData["Error"] as string;
 }
 
-<h1>Login</h1>
+<div class="block-center">
+    <div class="card">
+        @if(!string.IsNullOrEmpty(error)) {
+            <div class="error-container">
+                <h2 class="">Unable to connect</h2>
+            </div>
+        }
+        <form method="POST"
+              action="/login?ReturnUrl=@returnUrl">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Username"/>
 
-<form method="POST"
-      action="/login?ReturnUrl=@returnUrl">
-    <input type="text" name="username" placeholder="Username"/>
-    <input type="text" name="password" placeholder="Password"/>
-    <input type="submit" value="login"/>
-</form>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Password"/>
+                <input type="submit" value="login"/>
+            </div>
+        </form>
+    </div>
+</div>

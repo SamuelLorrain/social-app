@@ -1,18 +1,20 @@
-html {
-  font-size: 14px;
+.card {
+    border: 1px solid black;
+    padding: 1rem;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.block-center {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    height: 90vh;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.form-group {
+    display: flex;
+    flex-direction:column;
 }
 
-body {
-  margin-bottom: 60px;
+.form-group input {
+    margin: .5rem 0;
 }
